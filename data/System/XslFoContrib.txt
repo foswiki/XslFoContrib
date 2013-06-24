@@ -1,0 +1,162 @@
+%META:TOPICINFO{author="micha" comment="reprev" date="1364373322" format="1.1" reprev="3" version="3"}%
+---+!! %TOPIC%
+%SHORTDESCRIPTION%
+
+%TOC%
+
+This extension allows to publish structured content using XSL Formatting
+Objects (XSL-FO). It therefore leverages conversion of structured meta data
+from XML to PDF or RTF
+using a print formater such as [[http://xmlgraphics.apache.org/fop/][Apache&trade; FOP]].
+
+As a print formatter Apache&trade; FOP is able to produce the
+resulting pages to a specified output. Output formats currently supported
+include 
+
+   * PDF,
+   * PS, PCL, 
+   * AFP, 
+   * XML (area tree representation), 
+   * Print, 
+   * PNG, 
+   * RTF and 
+   * TXT. 
+
+The primary output target is PDF.
+
+Conversion of content is primarily done using a wiki application that reads 
+native Foswiki data to render it as XML which is then converted into XSL-FO using a XSLT style sheet.
+
+---++ Usage
+
+The fop renderer itself is triggered by calling the =fop= service which then will process the content specified.
+
+| *Url Parameter* | *Description* |
+| section | named section of the current topic to extract content from |
+| format | defines the output format, defaults to pdf |
+| xsltopic | topic holding the xsl transformation, defaults to the current topic |
+| xslsection | named section of the xsltopic to extract the transformation code from |
+| xslattachment | defines an attachment at the xsltopic holding the transformation file (specify either xslsection or xslattachment but not both) |
+| filename | optionally define the name of the file being generated, defaults to &lt;current-topic>.&lt;format> |
+| template | optionally define a view template to be used to render the FO content; content will be inserted to the template specifying a =%<nop>TEXT%= macro |
+
+---++ Examples
+
+---+++ Fo Mode
+
+   * pdf: %SCRIPTURL{"fop"}%/%WEB%/%TOPIC%?section=fo
+   * rtf: %SCRIPTURL{"fop"}%/%WEB%/%TOPIC%?section=fo&format=rtf&filename=myreport.rtf
+
+%TWISTY{showlink="show fo ..." hidelink="hide fo ..."}%
+<verbatim class="xml">
+%STARTSECTION{"fo"}%
+<?xml version="1.0" encoding="utf-8"?>
+
+<fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format">
+
+  <fo:layout-master-set>
+    <fo:simple-page-master master-name="simple"
+                  page-height="29.7cm"
+                  page-width="21cm"
+                  margin-top="1cm"
+                  margin-bottom="2cm"
+                  margin-left="2.5cm"
+                  margin-right="2.5cm">
+      <fo:region-body margin-top="3cm"/>
+      <fo:region-before extent="3cm"/>
+      <fo:region-after extent="1.5cm"/>
+    </fo:simple-page-master>
+  </fo:layout-master-set>
+
+  <fo:page-sequence master-reference="simple">
+
+    <fo:flow flow-name="xsl-region-body">
+
+      <fo:block font-size="18pt"
+            font-family="sans-serif"
+            line-height="24pt"
+            space-after.optimum="15pt"
+            background-color="blue"
+            color="white"
+            text-align="center"
+            padding-top="3pt">
+        Hello, %WIKINAME%!
+      </fo:block>
+
+      <fo:block font-size="12pt"
+                font-family="sans-serif"
+                line-height="15pt"
+                space-after.optimum="3pt"
+                text-align="justify"
+                language="en" hyphenate="true">
+        The Extensible Markup Language (XML) is a subset of SGML that is completely described in this document. Its goal is to
+        enable generic SGML to be served, received, and processed on the Web in the way that is now possible with HTML. XML
+        has been designed for ease of implementation and for interoperability with both SGML and HTML.
+      </fo:block>
+
+    </fo:flow>
+  </fo:page-sequence>
+</fo:root>
+%ENDSECTION{"fo"}%
+</verbatim>
+%ENDTWISTY%
+
+---+++ XSL mode
+
+   * %SCRIPTURL{"fop"}%/%WEB%/%TOPIC%?section=xml&xslsection=transform
+   * %SCRIPTURL{"fop"}%/%WEB%/%TOPIC%?section=xml&xslsection=transform&format=rtf
+
+%TWISTY{showlink="show xml/xsl ..." hidelink="hide xml/xsl..."}%
+
+<verbatim class="xml">
+%STARTSECTION{"xml"}%<name>%WIKINAME%</name>%ENDSECTION{"xml"}%
+</verbatim>
+
+<verbatim class="xml">
+%STARTSECTION{"transform"}%
+<?xml version="1.0" encoding="utf-8"?>
+<xsl:stylesheet version="1.0"
+      xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+      xmlns:fo="http://www.w3.org/1999/XSL/Format">
+  <xsl:output method="xml" indent="yes"/>
+  <xsl:template match="/">
+    <fo:root>
+      <fo:layout-master-set>
+        <fo:simple-page-master master-name="A4-portrait"
+              page-height="29.7cm" page-width="21.0cm" margin="2cm">
+          <fo:region-body/>
+        </fo:simple-page-master>
+      </fo:layout-master-set>
+      <fo:page-sequence master-reference="A4-portrait">
+        <fo:flow flow-name="xsl-region-body">
+          <fo:block>
+            Hello, <xsl:value-of select="name"/>!
+          </fo:block>
+        </fo:flow>
+      </fo:page-sequence>
+    </fo:root>
+  </xsl:template>
+</xsl:stylesheet>
+%ENDSECTION{"transform"}%
+</verbatim>
+%ENDTWISTY%
+
+---++ Installation Instructions
+
+%$INSTALL_INSTRUCTIONS%
+
+---++ Info
+<!--
+   * Set SHORTDESCRIPTION = %$SHORTDESCRIPTION%
+-->
+
+|  Author(s): | Michael Daum|
+|  Copyright: | &copy; 2013 Michael Daum http://michaeldaumconsulting.com |
+|  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
+|  Release: | %$RELEASE% |
+|  Version: | %$VERSION% |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  24 Jun 2013: | initial release |
+|  Dependencies: | %$DEPENDENCIES% |
+|  Home page: | Foswiki:Extensions/%TOPIC% |
+|  Support: | Foswiki:Support/%TOPIC% |
