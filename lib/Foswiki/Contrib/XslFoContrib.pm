@@ -4,13 +4,14 @@ package Foswiki::Contrib::XslFoContrib;
 use strict;
 use warnings;
 
-our $VERSION = '1.00';
-our $RELEASE = '1.00';
+our $VERSION = '1.01';
+our $RELEASE = '1.01';
 our $SHORTDESCRIPTION = 'FOP print formatter';
 
 use Foswiki ();
 use Foswiki::UI ();
 use Foswiki::Func ();
+use Foswiki::Plugins ();
 use File::Temp ();
 
 use constant DEBUG => 0;
@@ -223,8 +224,9 @@ sub toFileUrl {
   my $url = shift;
 
   my $fileUrl = $url;
+  my $urlHost = $Foswiki::Plugins::SESSION->{urlHost} || $Foswiki::cfg{DefaultUrlHost};
 
-  if ($fileUrl =~ /^(?:$Foswiki::cfg{DefaultUrlHost})?$Foswiki::cfg{PubUrlPath}(.*)$/) {
+  if ($fileUrl =~ /^(?:$urlHost)?$Foswiki::cfg{PubUrlPath}(.*)$/) {
     $fileUrl = $1;
     $fileUrl =~ s/\?.*$//;
     if ($fileUrl =~ /^\/(.*)\/([^\/]+)\/[^\/]+$/) {

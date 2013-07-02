@@ -156,6 +156,7 @@ The fop renderer itself is triggered by calling the =fop= service which then wil
 |  Release: | %$RELEASE% |
 |  Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  02 Jul 2013: | fixed url rewrite rules to use the current url host instead of the default url host |
 |  24 Jun 2013: | initial release |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Home page: | Foswiki:Extensions/%TOPIC% |
