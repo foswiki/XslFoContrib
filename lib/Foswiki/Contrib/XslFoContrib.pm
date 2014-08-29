@@ -4,8 +4,8 @@ package Foswiki::Contrib::XslFoContrib;
 use strict;
 use warnings;
 
-our $VERSION = '1.01';
-our $RELEASE = '1.01';
+our $VERSION = '1.02';
+our $RELEASE = '1.02';
 our $SHORTDESCRIPTION = 'FOP print formatter';
 
 use Foswiki ();
@@ -14,10 +14,10 @@ use Foswiki::Func ();
 use Foswiki::Plugins ();
 use File::Temp ();
 
-use constant DEBUG => 0;
+use constant TRACE => 0;
 
 sub writeDebug {
-  print STDERR "- XslFoContrib - " . $_[0] . "\n" if DEBUG;
+  print STDERR "- XslFoContrib - " . $_[0] . "\n" if TRACE;
 }
 
 sub fop {
@@ -116,12 +116,12 @@ sub fop {
 
     Foswiki::Func::popTopicContext() if ($web ne $xslWeb || $topic ne $xslTopic);;
 
-    my $xmlFile = new File::Temp(SUFFIX => '.xml', UNLINK => (DEBUG ? 0 : 1));
+    my $xmlFile = new File::Temp(SUFFIX => '.xml', UNLINK => (TRACE ? 0 : 1));
     writeDebug("xmlFile=" . $xmlFile->filename);
 
     print $xmlFile $content;
 
-    my $xslFile = new File::Temp(SUFFIX => '.xsl', UNLINK => (DEBUG ? 0 : 1));
+    my $xslFile = new File::Temp(SUFFIX => '.xsl', UNLINK => (TRACE ? 0 : 1));
     writeDebug("xslFile=" . $xslFile->filename);
 
     print $xslFile $xsl;
@@ -142,7 +142,7 @@ sub fop {
     # fo mode
     writeDebug("fo mode");
 
-    my $foFile = new File::Temp(SUFFIX => '.fo', UNLINK => (DEBUG ? 0 : 1));
+    my $foFile = new File::Temp(SUFFIX => '.fo', UNLINK => (TRACE ? 0 : 1));
     writeDebug("foFile=" . $foFile->filename);
 
     print $foFile $content;
@@ -250,7 +250,7 @@ sub toFileUrl {
 __END__
 Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 
-Copyright (C) 2013 Michael Daum http://michaeldaumconsulting.com
+Copyright (C) 2013-2014 Michael Daum http://michaeldaumconsulting.com
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License

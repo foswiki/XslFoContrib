@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="micha" comment="reprev" date="1364373322" format="1.1" reprev="3" version="3"}%
+%META:TOPICINFO{author="ProjectContributor" comment="" date="1409331028" format="1.1"  version="1"}%
 ---+!! %TOPIC%
 %SHORTDESCRIPTION%
 
@@ -151,7 +151,7 @@ The fop renderer itself is triggered by calling the =fop= service which then wil
 -->
 
 |  Author(s): | Michael Daum|
-|  Copyright: | &copy; 2013 Michael Daum http://michaeldaumconsulting.com |
+|  Copyright: | &copy; 2013-2014 Michael Daum http://michaeldaumconsulting.com |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Release: | %$RELEASE% |
 |  Version: | %$VERSION% |
