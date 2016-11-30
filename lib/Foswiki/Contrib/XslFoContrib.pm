@@ -4,8 +4,8 @@ package Foswiki::Contrib::XslFoContrib;
 use strict;
 use warnings;
 
-our $VERSION = '1.02';
-our $RELEASE = '1.02';
+our $VERSION = '1.10';
+our $RELEASE = '30 Nov 2016';
 our $SHORTDESCRIPTION = 'FOP print formatter';
 
 use Foswiki ();
@@ -177,7 +177,10 @@ sub fop {
       -type => $mimeType,
       -content_disposition => "inline; filename=\"$fileName\"",
     );
-    $response->print($stdout);
+    $response->body($stdout);
+    # SMELL: prevent compression
+    $ENV{'HTTP_ACCEPT_ENCODING'} = ''; 
+    $ENV{'HTTP2'} = ''; 
   }
 
   return;
@@ -250,7 +253,7 @@ sub toFileUrl {
 __END__
 Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 
-Copyright (C) 2013-2014 Michael Daum http://michaeldaumconsulting.com
+Copyright (C) 2013-2016 Michael Daum http://michaeldaumconsulting.com
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
